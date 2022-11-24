@@ -1,12 +1,57 @@
-﻿  game.cpp
+﻿  model_renderer.cpp
+D:\Softwares\OpenGL\Include\glad\glad.h(485,1): warning C4005: “GL_SRC1_ALPHA”: 宏重定义
+D:\Softwares\OpenGL\Include\GL\glew.h(1638): message : 参见“GL_SRC1_ALPHA”的前一个定义
+D:\Softwares\OpenGL\Include\glad\glad.h(486,1): warning C4005: “GL_BLEND_EQUATION_RGB”: 宏重定义
+D:\Softwares\OpenGL\Include\GL\glew.h(1731): message : 参见“GL_BLEND_EQUATION_RGB”的前一个定义
+D:\Softwares\OpenGL\Include\glad\glad.h(582,1): warning C4005: “GL_COMPARE_REF_TO_TEXTURE”: 宏重定义
+D:\Softwares\OpenGL\Include\GL\glew.h(2066): message : 参见“GL_COMPARE_REF_TO_TEXTURE”的前一个定义
+D:\Softwares\OpenGL\Include\glad\glad.h(583,1): warning C4005: “GL_CLIP_DISTANCE0”: 宏重定义
+D:\Softwares\OpenGL\Include\GL\glew.h(2060): message : 参见“GL_CLIP_DISTANCE0”的前一个定义
+D:\Softwares\OpenGL\Include\glad\glad.h(584,1): warning C4005: “GL_CLIP_DISTANCE1”: 宏重定义
+D:\Softwares\OpenGL\Include\GL\glew.h(2061): message : 参见“GL_CLIP_DISTANCE1”的前一个定义
+D:\Softwares\OpenGL\Include\glad\glad.h(585,1): warning C4005: “GL_CLIP_DISTANCE2”: 宏重定义
+D:\Softwares\OpenGL\Include\GL\glew.h(2062): message : 参见“GL_CLIP_DISTANCE2”的前一个定义
+D:\Softwares\OpenGL\Include\glad\glad.h(586,1): warning C4005: “GL_CLIP_DISTANCE3”: 宏重定义
+D:\Softwares\OpenGL\Include\GL\glew.h(2063): message : 参见“GL_CLIP_DISTANCE3”的前一个定义
+D:\Softwares\OpenGL\Include\glad\glad.h(587,1): warning C4005: “GL_CLIP_DISTANCE4”: 宏重定义
+D:\Softwares\OpenGL\Include\GL\glew.h(2064): message : 参见“GL_CLIP_DISTANCE4”的前一个定义
+D:\Softwares\OpenGL\Include\glad\glad.h(588,1): warning C4005: “GL_CLIP_DISTANCE5”: 宏重定义
+D:\Softwares\OpenGL\Include\GL\glew.h(2065): message : 参见“GL_CLIP_DISTANCE5”的前一个定义
+D:\Softwares\OpenGL\Include\glad\glad.h(591,1): warning C4005: “GL_MAX_CLIP_DISTANCES”: 宏重定义
+D:\Softwares\OpenGL\Include\GL\glew.h(2067): message : 参见“GL_MAX_CLIP_DISTANCES”的前一个定义
+D:\Softwares\OpenGL\Include\glad\glad.h(598,1): warning C4005: “GL_CONTEXT_FLAG_FORWARD_COMPATIBLE_BIT”: 宏重定义
+D:\Softwares\OpenGL\Include\GL\glew.h(2069): message : 参见“GL_CONTEXT_FLAG_FORWARD_COMPATIBLE_BIT”的前一个定义
+D:\Softwares\OpenGL\Include\glad\glad.h(609,1): warning C4005: “GL_MAX_VARYING_COMPONENTS”: 宏重定义
+D:\Softwares\OpenGL\Include\GL\glew.h(2068): message : 参见“GL_MAX_VARYING_COMPONENTS”的前一个定义
+D:\Softwares\OpenGL\Include\glad\glad.h(873,1): warning C4005: “GL_INVALID_INDEX”: 宏重定义
+D:\Softwares\OpenGL\Include\GL\glew.h(7734): message : 参见“GL_INVALID_INDEX”的前一个定义
+D:\Softwares\OpenGL\Include\glad\glad.h(915,1): warning C4005: “GL_TIMEOUT_IGNORED”: 宏重定义
+D:\Softwares\OpenGL\Include\GL\glew.h(6965): message : 参见“GL_TIMEOUT_IGNORED”的前一个定义
+  glad.c
 glew32s.lib(glew.obj) : warning LNK4099: 未找到 PDB“vc120.pdb”(使用“glew32s.lib(glew.obj)”或在“D:\Homework\C++\FPS\x64\Debug\vc120.pdb”中寻找)；正在链接对象，如同没有调试信息一样
-  SOIL.lib(SOIL.obj) : 找到 MSIL .netmodule 或使用 /GL 编译的模块；正在使用 /LTCG 重新启动链接；将 /LTCG 添加到链接命令行以改进链接器性能
+  SOIL.lib(stb_image_aug.obj) : 找到 MSIL .netmodule 或使用 /GL 编译的模块；正在使用 /LTCG 重新启动链接；将 /LTCG 添加到链接命令行以改进链接器性能
 LINK : warning LNK4075: 忽略“/INCREMENTAL”(由于“/LTCG”规范)
 LINK : warning LNK4098: 默认库“LIBCMT”与其他库的使用冲突；请使用 /NODEFAULTLIB:library
 LINK : warning LNK4098: 默认库“MSVCRT”与其他库的使用冲突；请使用 /NODEFAULTLIB:library
   正在生成代码
   已完成代码的生成
 glew32s.lib(glew.obj) : warning LNK4099: 未找到 PDB“vc120.pdb”(使用“glew32s.lib(glew.obj)”或在“D:\Homework\C++\FPS\x64\Debug\vc120.pdb”中寻找)；正在链接对象，如同没有调试信息一样
+LINK : warning LNK4286: 符号“__glewBindBuffer”(在“glew32s.lib(glew.obj)”中定义)已由“model_renderer.obj”导入
+LINK : warning LNK4286: 符号“__glewBindBuffer”(在“glew32s.lib(glew.obj)”中定义)已由“sprite_renderer.obj”导入
+LINK : warning LNK4286: 符号“__glewBufferData”(在“glew32s.lib(glew.obj)”中定义)已由“model_renderer.obj”导入
+LINK : warning LNK4286: 符号“__glewBufferData”(在“glew32s.lib(glew.obj)”中定义)已由“sprite_renderer.obj”导入
+LINK : warning LNK4286: 符号“__glewGenBuffers”(在“glew32s.lib(glew.obj)”中定义)已由“model_renderer.obj”导入
+LINK : warning LNK4286: 符号“__glewGenBuffers”(在“glew32s.lib(glew.obj)”中定义)已由“sprite_renderer.obj”导入
+LINK : warning LNK4286: 符号“__glewEnableVertexAttribArray”(在“glew32s.lib(glew.obj)”中定义)已由“model_renderer.obj”导入
+LINK : warning LNK4286: 符号“__glewEnableVertexAttribArray”(在“glew32s.lib(glew.obj)”中定义)已由“sprite_renderer.obj”导入
+LINK : warning LNK4286: 符号“__glewVertexAttribPointer”(在“glew32s.lib(glew.obj)”中定义)已由“model_renderer.obj”导入
+LINK : warning LNK4286: 符号“__glewVertexAttribPointer”(在“glew32s.lib(glew.obj)”中定义)已由“sprite_renderer.obj”导入
+LINK : warning LNK4286: 符号“__glewVertexAttribIPointer”(在“glew32s.lib(glew.obj)”中定义)已由“model_renderer.obj”导入
+LINK : warning LNK4286: 符号“__glewGenerateMipmap”(在“glew32s.lib(glew.obj)”中定义)已由“model_renderer.obj”导入
+LINK : warning LNK4286: 符号“__glewBindVertexArray”(在“glew32s.lib(glew.obj)”中定义)已由“model_renderer.obj”导入
+LINK : warning LNK4286: 符号“__glewBindVertexArray”(在“glew32s.lib(glew.obj)”中定义)已由“sprite_renderer.obj”导入
+LINK : warning LNK4286: 符号“__glewGenVertexArrays”(在“glew32s.lib(glew.obj)”中定义)已由“model_renderer.obj”导入
+LINK : warning LNK4286: 符号“__glewGenVertexArrays”(在“glew32s.lib(glew.obj)”中定义)已由“sprite_renderer.obj”导入
 LINK : warning LNK4286: 符号“__glewDeleteProgram”(在“glew32s.lib(glew.obj)”中定义)已由“resource_manager.obj”导入
 LINK : warning LNK4286: 符号“__glewAttachShader”(在“glew32s.lib(glew.obj)”中定义)已由“shader.obj”导入
 LINK : warning LNK4286: 符号“__glewCompileShader”(在“glew32s.lib(glew.obj)”中定义)已由“shader.obj”导入
@@ -28,12 +73,5 @@ LINK : warning LNK4286: 符号“__glewUniform4f”(在“glew32s.lib(glew.obj)�
 LINK : warning LNK4286: 符号“__glewUniformMatrix4fv”(在“glew32s.lib(glew.obj)”中定义)已由“shader.obj”导入
 LINK : warning LNK4286: 符号“__glewUseProgram”(在“glew32s.lib(glew.obj)”中定义)已由“shader.obj”导入
 LINK : warning LNK4286: 符号“__glewActiveTexture”(在“glew32s.lib(glew.obj)”中定义)已由“sprite_renderer.obj”导入
-LINK : warning LNK4286: 符号“__glewBindBuffer”(在“glew32s.lib(glew.obj)”中定义)已由“sprite_renderer.obj”导入
-LINK : warning LNK4286: 符号“__glewBufferData”(在“glew32s.lib(glew.obj)”中定义)已由“sprite_renderer.obj”导入
-LINK : warning LNK4286: 符号“__glewGenBuffers”(在“glew32s.lib(glew.obj)”中定义)已由“sprite_renderer.obj”导入
-LINK : warning LNK4286: 符号“__glewEnableVertexAttribArray”(在“glew32s.lib(glew.obj)”中定义)已由“sprite_renderer.obj”导入
-LINK : warning LNK4286: 符号“__glewVertexAttribPointer”(在“glew32s.lib(glew.obj)”中定义)已由“sprite_renderer.obj”导入
-LINK : warning LNK4286: 符号“__glewBindVertexArray”(在“glew32s.lib(glew.obj)”中定义)已由“sprite_renderer.obj”导入
 LINK : warning LNK4286: 符号“__glewDeleteVertexArrays”(在“glew32s.lib(glew.obj)”中定义)已由“sprite_renderer.obj”导入
-LINK : warning LNK4286: 符号“__glewGenVertexArrays”(在“glew32s.lib(glew.obj)”中定义)已由“sprite_renderer.obj”导入
   FPS.vcxproj -> D:\Homework\C++\FPS\x64\Debug\FPS.exe

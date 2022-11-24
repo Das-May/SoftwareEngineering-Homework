@@ -112,7 +112,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>assimp-vc143-mtd.lib;freetyped.lib;glew32s.lib;glfw3.lib;opengl32.lib;SOIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>assimp-vc143-mtd.lib;freetyped.lib;glew32s.lib;glfw3.lib;opengl32.lib;SOIL.lib;glut32.lib;glut.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>D:\Softwares\OpenGL\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -135,9 +135,12 @@
   <ItemGroup>
     <ClCompile Include="game.cpp" />
     <ClCompile Include="gameLevel.cpp" />
+    <ClCompile Include="glad.c" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="mesh.cpp" />
+    <ClCompile Include="model.cpp" />
+    <ClCompile Include="model_renderer.cpp" />
     <ClCompile Include="resource_manager.cpp" />
-    <ClCompile Include="SceneModel.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="sprite_renderer.cpp" />
     <ClCompile Include="texture.cpp" />
@@ -145,11 +148,17 @@
   <ItemGroup>
     <ClInclude Include="game.h" />
     <ClInclude Include="gameLevel.h" />
+    <ClInclude Include="mesh.h" />
+    <ClInclude Include="model.h" />
+    <ClInclude Include="model_renderer.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="resource_manager.h" />
-    <ClInclude Include="SceneModel.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="sprite_renderer.h" />
     <ClInclude Include="texture.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="FPS.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
