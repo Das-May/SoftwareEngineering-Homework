@@ -146,6 +146,7 @@
     <ClCompile Include="texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera_FPS.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="gameLevel.h" />
     <ClInclude Include="mesh.h" />

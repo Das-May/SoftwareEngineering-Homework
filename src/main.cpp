@@ -16,6 +16,7 @@
 
 // GLFW function declerations
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
+void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 
 // The Width of the screen
 const GLuint SCREEN_WIDTH = 800;
@@ -40,11 +41,12 @@ int main(int argc, char* argv[])
     glGetError(); // Call it once to catch glewInit() bug, all other errors are now from our application.
 
     glfwSetKeyCallback(window, key_callback);
+    glfwSetCursorPosCallback(window, mouse_callback);
 
     // OpenGL configuration
     glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-    glEnable(GL_CULL_FACE);
-    glEnable(GL_BLEND);
+    glEnable(GL_CULL_FACE);//开启背面剔除
+    glEnable(GL_BLEND);//开启混合
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     // Initialize game
@@ -73,7 +75,7 @@ int main(int argc, char* argv[])
         Breakout.Update(deltaTime);
 
         // Render
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         Breakout.Render();
 
@@ -99,4 +101,10 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         else if (action == GLFW_RELEASE)
             Breakout.Keys[key] = GL_FALSE;
     }
+}
+
+void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
+{
+    Breakout.xposIn = xposIn;
+    Breakout.yposIn = yposIn;
 }

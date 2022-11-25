@@ -30,6 +30,7 @@ public:
     GameState              State;
     GLboolean              Keys[1024];
     GLuint                 Width, Height;
+    double                 xposIn, yposIn, lastX, lastY;
     // Constructor/Destructor
     Game(GLuint width, GLuint height);
     ~Game();
