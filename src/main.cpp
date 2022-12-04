@@ -12,6 +12,7 @@
 
 #include "game.h"
 #include "resource_manager.h"
+#include "model.h"
 
 
 // GLFW function declerations
@@ -27,13 +28,21 @@ Game Breakout(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 int main(int argc, char* argv[])
 {
+    // glfw: 初始化和配置
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-    GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Breakout", nullptr, nullptr);
+    // glfw窗口创建
+    GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "FPS Game Engine", nullptr, nullptr);
+    if (window == NULL)
+    {
+        std::cout << "Failed to create GLFW window" << std::endl;
+        glfwTerminate();
+        return -1;
+    }
     glfwMakeContextCurrent(window);
 
     glewExperimental = GL_TRUE;
@@ -47,10 +56,16 @@ int main(int argc, char* argv[])
     glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     glEnable(GL_CULL_FACE);//开启背面剔除
     glEnable(GL_BLEND);//开启混合
+    glEnable(GL_DEPTH_TEST);//开启深度测试
+
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     // Initialize game
     Breakout.Init();
+    Model m = Model("models/FPS_box.obj");
+    m.Draw(ResourceManager::GetShader("天空盒"));
+
+    
 
     // DeltaTime variables
     GLfloat deltaTime = 0.0f;
@@ -76,7 +91,7 @@ int main(int argc, char* argv[])
 
         // Render
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT);// 在渲染新一帧时清除深度缓存
         Breakout.Render();
 
         glfwSwapBuffers(window);

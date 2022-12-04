@@ -20,7 +20,7 @@ Model* Skybox;
 // camera
 int SCR_WIDTH = 800;
 int SCR_HEIGHT = 600;
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+Camera camera(glm::vec3(0.0f, 0.0f, 5.0f));
 float lastX = (float)SCR_WIDTH / 2.0;
 float lastY = (float)SCR_HEIGHT / 2.0;
 bool firstMouse = true;
@@ -40,21 +40,26 @@ Game::~Game()
 void Game::Init()
 {
     // Load shaders
-    ResourceManager::LoadShader("shaders/sprite.vs", "shaders/sprite.fs", nullptr, "sprite");
-    ResourceManager::LoadShader("shaders/skybox.vs", "shaders/skybox.fs", nullptr, "天空盒");
+    //ResourceManager::LoadShader("shaders/sprite.vs", "shaders/sprite.fs", nullptr, "sprite");
+    ResourceManager::LoadShader("shaders/model_loading.vs", "shaders/model_loading.fs", nullptr, "天空盒");
+    
     // Configure shaders
     glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(this->Width), static_cast<GLfloat>(this->Height), 0.0f, -1.0f, 1.0f);
-    ResourceManager::GetShader("sprite").Use().SetInteger("image", 0);
+    //ResourceManager::GetShader("sprite").Use().SetInteger("image", 0);
     for (auto& shader : ResourceManager::Shaders)
     {
         shader.second.SetMatrix4("projection", projection);
     }
+    glm::mat4 view = camera.GetViewMatrix();
+    ResourceManager::GetShader("sprite").SetMatrix4("view", view);
+
     //ResourceManager::GetShader("sprite").SetMatrix4("projection", projection);
+    
     // Load textures
-    ResourceManager::LoadTexture("textures/crosshair.png", GL_TRUE, "准星");
+    //ResourceManager::LoadTexture("textures/crosshair.png", GL_TRUE, "准星");
 
     // Set render-specific controls
-    Renderer = new SpriteRenderer(ResourceManager::GetShader("sprite"));
+    //Renderer = new SpriteRenderer(ResourceManager::GetShader("sprite"));
     Skybox = new Model("models/FPS_cube.obj");
 }
 
@@ -103,6 +108,6 @@ void Game::ProcessInput(GLfloat dt)
 
 void Game::Render()
 {
-    Renderer->DrawSprite(ResourceManager::GetTexture("准星"), glm::vec2(200, 200), glm::vec2(300, 400), 45.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+    //Renderer->DrawSprite(ResourceManager::GetTexture("准星"), glm::vec2(200, 200), glm::vec2(300, 400), 45.0f, glm::vec3(0.0f, 1.0f, 0.0f));
     Skybox->Draw(ResourceManager::GetShader("天空盒"));
 }
