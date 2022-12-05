@@ -1,157 +1,107 @@
-/*******************************************************************
-** This code is part of Breakout.
-**
-** Breakout is free software: you can redistribute it and/or modify
-** it under the terms of the CC BY 4.0 license as published by
-** Creative Commons, either version 4 of the License, or (at your
-** option) any later version.
-******************************************************************/
-#define GLEW_STATIC
-#include <GL/glew.h>
-//#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+/******************************
+* 这是我的作业《基于OpenGL实现的FPS游戏引擎》的代码
+* 
+* 
+*/
+#include <glad/glad.h>  // 这是配置OpenGL上下文的库
+#include <GLFW/glfw3.h> // 这是配置渲染窗口的库
 
-#include "game.h"
-#include "resource_manager.h"
-#include "model.h"
+#include <iostream>		// 熟悉的 用于输入输出的库
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);			// 配置窗口（帧缓冲）大小的函数
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);	// 响应用户键盘输入的函数
 
 
-
-
-// GLFW function declerations
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
-void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-
-// The Width of the screen
-const GLuint SCREEN_WIDTH = 800;
-// The height of the screen
-const GLuint SCREEN_HEIGHT = 600;
-
-Game Breakout(SCREEN_WIDTH, SCREEN_HEIGHT);
+// 初始的窗口大小
+const unsigned int SCREEN_WIDTH = 800;	// 宽
+const unsigned int SCREEN_HEIGHT = 600;	// 高
 
 int main(int argc, char* argv[])
 {
-    // glfw: 初始化和配置
-    // ---------------------------------------
+    // glfw: 窗口初始化和配置
     glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);                  // 上下文使用的最低版本 3
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);                  // 上下文使用的最高版本 3
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);  // 禁止调整窗口大小
 #ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
+    //glfwWindowHint(GLFW_RESIZABLE, false);
 
-    // glfw 窗口创建
-    // ---------------------------------------
-    GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "FPS Game Engine", nullptr, nullptr);
-    if (window == NULL)
-    {
-        std::cout << "Failed to create GLFW window" << std::endl;
-        glfwTerminate();
-        return -1;
-    }
+    GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Little FPS Game Enginee", nullptr, nullptr);
     glfwMakeContextCurrent(window);
 
-    // glfw 加入设备输入操作
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-    glfwSetKeyCallback(window, key_callback);
-    glfwSetCursorPosCallback(window, mouse_callback);
-
-    // glew库 配置
-    glewExperimental = GL_TRUE; // 令glew在初始化期间试图加载OpenGL的所有拓展函数
-    glewInit();
-    glGetError(); // Call it once to catch glewInit() bug, all other errors are now from our application.
-
-    
-
-    // glad: 加载所有OpenGL函数指针
+    // glad: 加载所有的OpenGL函数指针
     // ---------------------------------------
-    /*if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
-    }*/
+    }
 
-    // OpenGL 配置
-    // ---------------------------------------
-    //glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-    //glEnable(GL_CULL_FACE);             //开启背面剔除
-    //glEnable(GL_BLEND);                 //开启混合
-    //glEnable(GL_DEPTH_TEST);            //开启深度测试
+    // glfw: 窗口回调函数
+    glfwSetKeyCallback(window, key_callback);
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    // OpenGL: 配置
+    // --------------------
+    glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    // 初始化游戏
-    Breakout.Init();
-    //Model m = Model("models/FPS_box.obj");
-    //m.Draw(ResourceManager::GetShader("天空盒"));
-
+    // 游戏: 初始化
+    // ---------------
     
 
-    // DeltaTime variables
-    GLfloat deltaTime = 0.0f;
-    GLfloat lastFrame = 0.0f;
-
-    // Start Game within Menu State
-    Breakout.State = GAME_ACTIVE;
+    // delta time variables 时间间隔变量
+    // -------------------
+    float deltaTime = 0.0f;
+    float lastFrame = 0.0f;
 
     while (!glfwWindowShouldClose(window))
     {
-        // Calculate delta time
-        GLfloat currentFrame = glfwGetTime();
+        // calculate delta time 计算时间间隔
+        // --------------------
+        float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
         glfwPollEvents();
 
-        //deltaTime = 0.001f;
-        // Manage user input
-        Breakout.ProcessInput(deltaTime);
+        // manage user input 管理用户输入
+        // -----------------
+        
 
-        // Update Game state
-        Breakout.Update(deltaTime);
+        // update game state 更新游戏状态
+        // -----------------
+        
 
-        // Render
-        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);// 在渲染新一帧时清除深度缓存
-        Breakout.Render();
+        // render 渲染
+        // ------
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        
 
         glfwSwapBuffers(window);
     }
 
-    // Delete all resources as loaded using the resource manager
-    ResourceManager::Clear();
+    // 程序终止之后，回收资源
+    // ---------------------------------------------------------
 
     glfwTerminate();
     return 0;
 }
 
-// glfw: whenever the window size changed (by OS or user resize) this callback function executes
-// ---------------------------------------------------------------------------------------------
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
+{
+    // 当用户按下Esc键时，关闭程序
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+    
+}
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
     // make sure the viewport matches the new window dimensions; note that width and 
     // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
-}
-
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
-{
-    // When a user presses the escape key, we set the WindowShouldClose property to true, closing the application
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, GL_TRUE);
-    if (key >= 0 && key < 1024)
-    {
-        if (action == GLFW_PRESS)
-            Breakout.Keys[key] = GL_TRUE;
-        else if (action == GLFW_RELEASE)
-            Breakout.Keys[key] = GL_FALSE;
-    }
-}
-
-void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
-{
-    Breakout.xposIn = xposIn;
-    Breakout.yposIn = yposIn;
 }

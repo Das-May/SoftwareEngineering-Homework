@@ -133,33 +133,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="game.cpp" />
-    <ClCompile Include="gameLevel.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="mesh.cpp" />
-    <ClCompile Include="model.cpp" />
-    <ClCompile Include="model_renderer.cpp" />
-    <ClCompile Include="resource_manager.cpp" />
-    <ClCompile Include="shader.cpp" />
-    <ClCompile Include="sprite_renderer.cpp" />
-    <ClCompile Include="texture.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Camera_FPS.h" />
-    <ClInclude Include="game.h" />
-    <ClInclude Include="gameLevel.h" />
-    <ClInclude Include="mesh.h" />
-    <ClInclude Include="model.h" />
-    <ClInclude Include="model_renderer.h" />
-    <ClInclude Include="resource.h" />
-    <ClInclude Include="resource_manager.h" />
-    <ClInclude Include="shader.h" />
-    <ClInclude Include="sprite_renderer.h" />
-    <ClInclude Include="texture.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="FPS.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
