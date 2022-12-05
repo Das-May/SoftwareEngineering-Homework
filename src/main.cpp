@@ -8,6 +8,7 @@
 ******************************************************************/
 #define GLEW_STATIC
 #include <GL/glew.h>
+//#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 #include "game.h"
@@ -15,7 +16,10 @@
 #include "model.h"
 
 
+
+
 // GLFW function declerations
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 
@@ -29,13 +33,18 @@ Game Breakout(SCREEN_WIDTH, SCREEN_HEIGHT);
 int main(int argc, char* argv[])
 {
     // glfw: 初始化和配置
+    // ---------------------------------------
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);  // 禁止调整窗口大小
+#ifdef __APPLE__
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+#endif
 
-    // glfw窗口创建
+    // glfw 窗口创建
+    // ---------------------------------------
     GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "FPS Game Engine", nullptr, nullptr);
     if (window == NULL)
     {
@@ -45,25 +54,39 @@ int main(int argc, char* argv[])
     }
     glfwMakeContextCurrent(window);
 
-    glewExperimental = GL_TRUE;
-    glewInit();
-    glGetError(); // Call it once to catch glewInit() bug, all other errors are now from our application.
-
+    // glfw 加入设备输入操作
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetKeyCallback(window, key_callback);
     glfwSetCursorPosCallback(window, mouse_callback);
 
-    // OpenGL configuration
-    glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-    glEnable(GL_CULL_FACE);//开启背面剔除
-    glEnable(GL_BLEND);//开启混合
-    glEnable(GL_DEPTH_TEST);//开启深度测试
+    // glew库 配置
+    glewExperimental = GL_TRUE; // 令glew在初始化期间试图加载OpenGL的所有拓展函数
+    glewInit();
+    glGetError(); // Call it once to catch glewInit() bug, all other errors are now from our application.
 
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    
 
-    // Initialize game
+    // glad: 加载所有OpenGL函数指针
+    // ---------------------------------------
+    /*if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    {
+        std::cout << "Failed to initialize GLAD" << std::endl;
+        return -1;
+    }*/
+
+    // OpenGL 配置
+    // ---------------------------------------
+    //glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    //glEnable(GL_CULL_FACE);             //开启背面剔除
+    //glEnable(GL_BLEND);                 //开启混合
+    //glEnable(GL_DEPTH_TEST);            //开启深度测试
+
+    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    // 初始化游戏
     Breakout.Init();
-    Model m = Model("models/FPS_box.obj");
-    m.Draw(ResourceManager::GetShader("天空盒"));
+    //Model m = Model("models/FPS_box.obj");
+    //m.Draw(ResourceManager::GetShader("天空盒"));
 
     
 
@@ -102,6 +125,15 @@ int main(int argc, char* argv[])
 
     glfwTerminate();
     return 0;
+}
+
+// glfw: whenever the window size changed (by OS or user resize) this callback function executes
+// ---------------------------------------------------------------------------------------------
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+    // make sure the viewport matches the new window dimensions; note that width and 
+    // height will be significantly larger than specified on retina displays.
+    glViewport(0, 0, width, height);
 }
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
