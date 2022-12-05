@@ -58,14 +58,14 @@ int main(int argc, char* argv[])
     float deltaTime = 0.0f;
     float lastFrame = 0.0f;
 
-    while (!glfwWindowShouldClose(window))
+    while (!glfwWindowShouldClose(window))// 检测窗口是否关闭
     {
         // calculate delta time 计算时间间隔
         // --------------------
         float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
-        glfwPollEvents();
+        glfwPollEvents();//整理输入事件
 
         // manage user input 管理用户输入
         // -----------------
@@ -101,7 +101,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
-    // make sure the viewport matches the new window dimensions; note that width and 
-    // height will be significantly larger than specified on retina displays.
+    // 确保视口匹配新的窗口尺寸
+    // 注意宽度和高度将明显大于视网膜显示器上指定的高度
     glViewport(0, 0, width, height);
 }
