@@ -9,6 +9,7 @@
 #include <iostream>		// 熟悉的 用于输入输出的库
 
 #include "resource_manager.h"
+#include "Renderer.h"
 
 // 声明函数
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);			// 配置窗口（帧缓冲）大小的函数
@@ -49,8 +50,9 @@ int main(int argc, char* argv[])
     // OpenGL: 配置
     // --------------------
     glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_DEPTH_TEST);                            // 开启深度测试
+    //glEnable(GL_BLEND);                                 // 开启混合
+    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);  // 混合函数是 src + dest * (1-src)
 
     // 游戏: 初始化
     // ---------------
@@ -59,37 +61,9 @@ int main(int argc, char* argv[])
     ResourceManager::LoadTexture("textures/top.jpg", false, "纹理测试");
     Texture2D t = ResourceManager::GetTexture("纹理测试");
     s.Use().SetInteger("texture1", 0);
-    
-
-    // 下面是抄的，别管
-    // 配置VAO和VBO
-    unsigned int quadVAO;//顶点数组对象
-    unsigned int VBO;//顶点缓冲区对象
-    float vertices[] = {
-        // pos      // tex
-        0.0f, 1.0f, 0.0f, 1.0f,
-        1.0f, 0.0f, 1.0f, 0.0f,
-        0.0f, 0.0f, 0.0f, 0.0f,
-
-        0.0f, 1.0f, 0.0f, 1.0f,
-        1.0f, 1.0f, 1.0f, 1.0f,
-        1.0f, 0.0f, 1.0f, 0.0f
-    };
-    glGenVertexArrays(1, &quadVAO);
-    glGenBuffers(1, &VBO);
-    // 把我们的顶点数组复制到一个顶点缓冲中，供OpenGL使用
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    // 绑定顶点数组对象
-    glBindVertexArray(quadVAO); 
-    glEnableVertexAttribArray(0);
-    // 设定顶点属性指针
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
-
-    
-
+    ResourceManager::LoadModel("models/FPS_cube.obj", "模型测试");
+    Model m = ResourceManager::GetModel("模型测试");
+    Renderer *r = new Renderer(m, s, t);
 
     // delta time variables 时间间隔变量
     // -------------------
@@ -116,17 +90,9 @@ int main(int argc, char* argv[])
         // render 渲染
         // -----------------
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //清理缓冲
 
-        s.Use();                            //激活着色器
-
-        glActiveTexture(GL_TEXTURE0);
-        t.Bind();
-
-        glBindVertexArray(quadVAO);         //绑定图元
-        glDrawArrays(GL_TRIANGLES, 0, 6);   //画它
-        glBindVertexArray(0);               //解绑
-        
+        r->Draw();
 
         glfwSwapBuffers(window);
     }

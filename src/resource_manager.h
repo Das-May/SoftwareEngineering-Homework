@@ -8,6 +8,11 @@
 
 #include "shader.h"
 #include "texture.h"
+#include "mesh.h"
+
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
 
 // 单例模式
 // 加载并按照命名来存储 着色器/纹理/模型
@@ -19,6 +24,10 @@ public:
     // 把所有资源存储在字典中，以命名查找
     static std::map<std::string, Shader>    Shaders;
     static std::map<std::string, Texture2D>    Textures;
+    //typedef vector<Mesh> Model;
+    static std::map<std::string, Model>    Models;
+    static string currentName;
+
     // 从文件中加载着色器
     static Shader    LoadShader(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile, std::string name);
     // 检索（获取）已存储的着色器
@@ -27,6 +36,10 @@ public:
     static Texture2D LoadTexture(const char* file, bool alpha, std::string name);
     // 检索一个已存储的纹理
     static Texture2D GetTexture(std::string name);
+    // 从文件中加载模型
+    static Model LoadModel(string const& path, std::string name);
+    // 检索一个已存储的模型
+    static Model GetModel(std::string name);
     // 正确地分配所有已加载的资源
     static void      Clear();
 private:
@@ -36,6 +49,11 @@ private:
     static Shader    loadShaderFromFile(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile = nullptr);
     // 从文件中加载单个纹理
     static Texture2D loadTextureFromFile(const char* file, bool alpha);
+    // 从文件中加载具有支持的ASSIMP扩展名的模型，并将得到的网格存储在网格向量中
+    static void loadModel(string const& path);
+    static void processNode(aiNode* node, const aiScene* scene);
+    static Mesh processMesh(aiMesh* mesh, const aiScene* scene);
+
 };
 
 #endif
