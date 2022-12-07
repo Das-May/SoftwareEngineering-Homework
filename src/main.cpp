@@ -54,8 +54,12 @@ int main(int argc, char* argv[])
 
     // 游戏: 初始化
     // ---------------
-    ResourceManager::LoadShader("shaders/model_loading.vs", "shaders/model_loading.fs", nullptr, "测试");
-    Shader s = ResourceManager::GetShader("测试");
+    ResourceManager::LoadShader("shaders/model_loading.vs", "shaders/model_loading.fs", nullptr, "着色器测试");
+    Shader s = ResourceManager::GetShader("着色器测试");
+    ResourceManager::LoadTexture("textures/top.jpg", false, "纹理测试");
+    Texture2D t = ResourceManager::GetTexture("纹理测试");
+    s.Use().SetInteger("texture1", 0);
+    
 
     // 下面是抄的，别管
     // 配置VAO和VBO
@@ -115,6 +119,9 @@ int main(int argc, char* argv[])
         glClear(GL_COLOR_BUFFER_BIT);
 
         s.Use();                            //激活着色器
+
+        glActiveTexture(GL_TEXTURE0);
+        t.Bind();
 
         glBindVertexArray(quadVAO);         //绑定图元
         glDrawArrays(GL_TRIANGLES, 0, 6);   //画它
