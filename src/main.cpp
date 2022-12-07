@@ -8,6 +8,9 @@
 
 #include <iostream>		// 熟悉的 用于输入输出的库
 
+#include "resource_manager.h"
+
+// 声明函数
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);			// 配置窗口（帧缓冲）大小的函数
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);	// 响应用户键盘输入的函数
 
@@ -51,7 +54,38 @@ int main(int argc, char* argv[])
 
     // 游戏: 初始化
     // ---------------
+    ResourceManager::LoadShader("shaders/model_loading.vs", "shaders/model_loading.fs", nullptr, "测试");
+    Shader s = ResourceManager::GetShader("测试");
+
+    // 下面是抄的，别管
+    // 配置VAO和VBO
+    unsigned int quadVAO;//顶点数组对象
+    unsigned int VBO;//顶点缓冲区对象
+    float vertices[] = {
+        // pos      // tex
+        0.0f, 1.0f, 0.0f, 1.0f,
+        1.0f, 0.0f, 1.0f, 0.0f,
+        0.0f, 0.0f, 0.0f, 0.0f,
+
+        0.0f, 1.0f, 0.0f, 1.0f,
+        1.0f, 1.0f, 1.0f, 1.0f,
+        1.0f, 0.0f, 1.0f, 0.0f
+    };
+    glGenVertexArrays(1, &quadVAO);
+    glGenBuffers(1, &VBO);
+    // 把我们的顶点数组复制到一个顶点缓冲中，供OpenGL使用
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    // 绑定顶点数组对象
+    glBindVertexArray(quadVAO); 
+    glEnableVertexAttribArray(0);
+    // 设定顶点属性指针
+    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+
     
+
 
     // delta time variables 时间间隔变量
     // -------------------
@@ -76,9 +110,15 @@ int main(int argc, char* argv[])
         
 
         // render 渲染
-        // ------
+        // -----------------
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
+
+        s.Use();                            //激活着色器
+
+        glBindVertexArray(quadVAO);         //绑定图元
+        glDrawArrays(GL_TRIANGLES, 0, 6);   //画它
+        glBindVertexArray(0);               //解绑
         
 
         glfwSwapBuffers(window);
