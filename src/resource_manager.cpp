@@ -15,36 +15,36 @@ std::map<std::string, Texture2D>    ResourceManager::Textures;
 std::map<std::string, Model>    ResourceManager::Models;
 string ResourceManager::currentName;
 
-Shader ResourceManager::LoadShader(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile, std::string name)
+Shader& ResourceManager::LoadShader(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile, std::string name)
 {
     Shaders[name] = loadShaderFromFile(vShaderFile, fShaderFile, gShaderFile);
     return Shaders[name];
 }
 
-Shader ResourceManager::GetShader(std::string name)
+Shader& ResourceManager::GetShader(std::string name)
 {
     return Shaders[name];
 }
 
-Texture2D ResourceManager::LoadTexture(const char* file, bool alpha, std::string name)
+Texture2D& ResourceManager::LoadTexture(const char* file, bool alpha, std::string name)
 {
     Textures[name] = loadTextureFromFile(file, alpha);
     return Textures[name];
 }
 
-Texture2D ResourceManager::GetTexture(std::string name)
+Texture2D& ResourceManager::GetTexture(std::string name)
 {
     return Textures[name];
 }
 
-Model ResourceManager::LoadModel(string const& path, std::string name)
+Model& ResourceManager::LoadModel(string const& path, std::string name)
 {
     currentName = name;
     loadModel(path);
     return Models[name];
 }
 
-Model ResourceManager::GetModel(std::string name)
+Model& ResourceManager::GetModel(std::string name)
 {
     return Models[name];
 }

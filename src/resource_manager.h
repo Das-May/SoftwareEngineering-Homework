@@ -29,17 +29,17 @@ public:
     static string currentName;
 
     // 从文件中加载着色器
-    static Shader    LoadShader(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile, std::string name);
+    static Shader& LoadShader(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile, std::string name);
     // 检索（获取）已存储的着色器
-    static Shader    GetShader(std::string name);
+    static Shader& GetShader(std::string name);
     // 从文件中加载纹理
-    static Texture2D LoadTexture(const char* file, bool alpha, std::string name);
+    static Texture2D& LoadTexture(const char* file, bool alpha, std::string name);
     // 检索一个已存储的纹理
-    static Texture2D GetTexture(std::string name);
+    static Texture2D& GetTexture(std::string name);
     // 从文件中加载模型
-    static Model LoadModel(string const& path, std::string name);
+    static Model& LoadModel(string const& path, std::string name);
     // 检索一个已存储的模型
-    static Model GetModel(std::string name);
+    static Model& GetModel(std::string name);
     // 正确地分配所有已加载的资源
     static void      Clear();
 private:

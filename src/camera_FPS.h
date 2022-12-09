@@ -55,7 +55,7 @@ public:
     void ProcessKeyboard(Camera_Movement direction, float deltaTime);
 
     // 处理从鼠标输入系统接收的输入。期望x和y方向上的偏移值。
-    void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch);
+    void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true);
 
     // 处理从鼠标滚轮事件接收的输入。只需要输入垂直轮轴。
     void ProcessMouseScroll(float yoffset);

@@ -14,6 +14,7 @@
 // 声明函数
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);			// 配置窗口（帧缓冲）大小的函数
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);	// 响应用户键盘输入的函数
+void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
 
@@ -21,12 +22,6 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 // 初始的窗口大小
 const unsigned int SCREEN_WIDTH = 800;	// 宽
 const unsigned int SCREEN_HEIGHT = 600;	// 高
-
-// camera
-/*Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
-float lastX = SCREEN_WIDTH / 2.0f;
-float lastY = SCREEN_HEIGHT / 2.0f;
-bool firstMouse = true;*/
 
 // 游戏
 Game fps(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -56,6 +51,7 @@ int main(int argc, char* argv[])
 
     // glfw: 窗口回调函数
     glfwSetKeyCallback(window, key_callback);
+    glfwSetCursorPosCallback(window, mouse_callback);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     // OpenGL: 配置
@@ -114,7 +110,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     // 当用户按下Esc键时，关闭程序
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
-    //
+    // 将按键反馈给Game类
     if (key >= 0 && key < 1024)
     {
         if (action == GLFW_PRESS)
@@ -128,9 +124,20 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     
 }
 
+// glfw: whenever the mouse moves, this callback is called
+// -------------------------------------------------------
+void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
+{
+    fps.xpos = static_cast<float>(xposIn);
+    fps.ypos = static_cast<float>(yposIn);
+}
+
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
     // 确保视口匹配新的窗口尺寸
     // 注意宽度和高度将明显大于视网膜显示器上指定的高度
     glViewport(0, 0, width, height);
+    fps.Width = width;
+    fps.Height = height;
 }

@@ -20,6 +20,7 @@ public:
     // game state
     GameState               State;
     bool                    Keys[1024];
+    float                   lastX, lastY, xpos, ypos;
     unsigned int            Width, Height;
     // 构造函数/析构函数
     Game(unsigned int width, unsigned int height);
