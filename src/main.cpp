@@ -8,17 +8,28 @@
 
 #include <iostream>		// 熟悉的 用于输入输出的库
 
-#include "resource_manager.h"
-#include "Renderer.h"
+#include "game.h"
+
 
 // 声明函数
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);			// 配置窗口（帧缓冲）大小的函数
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);	// 响应用户键盘输入的函数
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+
 
 
 // 初始的窗口大小
 const unsigned int SCREEN_WIDTH = 800;	// 宽
 const unsigned int SCREEN_HEIGHT = 600;	// 高
+
+// camera
+/*Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+float lastX = SCREEN_WIDTH / 2.0f;
+float lastY = SCREEN_HEIGHT / 2.0f;
+bool firstMouse = true;*/
+
+// 游戏
+Game fps(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 int main(int argc, char* argv[])
 {
@@ -56,14 +67,7 @@ int main(int argc, char* argv[])
 
     // 游戏: 初始化
     // ---------------
-    ResourceManager::LoadShader("shaders/model_loading.vs", "shaders/model_loading.fs", nullptr, "着色器测试");
-    Shader s = ResourceManager::GetShader("着色器测试");
-    ResourceManager::LoadTexture("textures/top.jpg", false, "纹理测试");
-    Texture2D t = ResourceManager::GetTexture("纹理测试");
-    s.Use().SetInteger("texture1", 0);
-    ResourceManager::LoadModel("models/FPS_cube.obj", "模型测试");
-    Model m = ResourceManager::GetModel("模型测试");
-    Renderer *r = new Renderer(m, s, t);
+    fps.Init();
 
     // delta time variables 时间间隔变量
     // -------------------
@@ -81,18 +85,19 @@ int main(int argc, char* argv[])
 
         // manage user input 管理用户输入
         // -----------------
+        fps.ProcessInput(deltaTime);
         
 
         // update game state 更新游戏状态
         // -----------------
-        
+        fps.Update(deltaTime);
 
         // render 渲染
         // -----------------
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //清理缓冲
 
-        r->Draw();
+        fps.Render();
 
         glfwSwapBuffers(window);
     }
@@ -109,6 +114,17 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     // 当用户按下Esc键时，关闭程序
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
+    //
+    if (key >= 0 && key < 1024)
+    {
+        if (action == GLFW_PRESS)
+            fps.Keys[key] = true;
+        else if (action == GLFW_RELEASE)
+        {
+            fps.Keys[key] = false;
+            //fps.KeysProcessed[key] = false;
+        }
+    }
     
 }
 
