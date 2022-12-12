@@ -55,32 +55,81 @@ Parameter ResourceManager::LoadParameter()
     //初始化
     Parameters.bag_parameter.clear();
     Parameters.enemy_parameter.clear();
+    ifstream fin;
+    istringstream iss;
+    string s;
+    double t;
 
     // 读取
-
-
-    CharacterParameter c;
-    // 获取场景参数
-    Parameters.scene_parameter.width = 100;
-    Parameters.scene_parameter.length = 100;
-    
-    Parameters.scene_parameter.obstacles_postion_x.push_back(3);
-    Parameters.scene_parameter.obstacles_postion_z.push_back(4);
-    // 玩家参数
-    Parameters.player_parameter.x = 5;
-    Parameters.player_parameter.z = 3;
-
-    // 血包参数
-    for (int i = 1; i < 10; i+=2)
+    fin.open("Setup.txt");
+    getline(fin, s);
+    if (s[0] == '@')// 1.获取场景参数
     {
-        CharacterParameter b(i, i, 10, 10);
-        Parameters.bag_parameter.push_back(b);
+        while (getline(fin, s) && s[0] != '@')// 逐行读取，将每一行数据读取到字符串 s 中
+        {
+            iss.clear();
+            iss.str(s);
+            iss >> t;// 逐词读取，遍历每一行中的每个词 t
+            Parameters.scene_parameter.width = t;
+            iss >> t;
+            Parameters.scene_parameter.length = 100;
+        }  
     }
-
-    // 敌人参数
-    CharacterParameter e(3, 7, 10, 10);
-    Parameters.enemy_parameter.push_back(e);
-
+    cout << "成功读取场景参数" << endl;
+    if (s[0] == '@')// 2.读取障碍物位置
+    {
+        while (getline(fin, s) && s[0] != '@')
+        {
+            iss.clear();
+            iss.str(s);
+            iss >> t; Parameters.scene_parameter.obstacles_postion_x.push_back(t);
+            iss >> t; Parameters.scene_parameter.obstacles_postion_z.push_back(t);
+        }
+    }
+    cout << "成功读取障碍物信息" << endl;
+    if (s[0] == '@')// 3.读取角色信息
+    {
+        while (getline(fin, s) && s[0] != '@')
+        {
+            iss.clear();
+            iss.str(s);
+            iss >> t; Parameters.player_parameter.x = t;
+            iss >> t; Parameters.player_parameter.z = t;
+            iss >> t; Parameters.player_parameter.hp = t;
+            iss >> t; Parameters.player_parameter.atk = t;
+        }
+    }
+    cout << "成功读取角色信息" << endl;
+    // 读取敌人信息
+    if (s[0] == '@')
+    {
+        while (getline(fin, s) && s[0] != '@')
+        {
+            iss.clear();
+            iss.str(s);
+            double a, b, c, d;
+            iss >> a; iss >> b; iss >> c; iss >> d;
+            CharacterParameter e(a,b,c,d);
+            iss >> t; Parameters.enemy_parameter.push_back(e);
+        }
+    }
+    cout << "成功读取敌人信息" << endl;
+    // 读取血包信息
+    if (s[0] == '@')
+    {
+        while (getline(fin, s) && s[0] != '@')
+        {
+            iss.clear();
+            iss.str(s);
+            double a, b, c, d;
+            iss >> a; iss >> b; iss >> c; iss >> d;
+            CharacterParameter bag(a, b, c, d);
+            iss >> t; Parameters.bag_parameter.push_back(bag);
+        }
+    }
+    cout << "成功读取血包信息" << endl;
+    cout << "----------------------------" << endl;
+    fin.close();
     return Parameters;
 }
 
