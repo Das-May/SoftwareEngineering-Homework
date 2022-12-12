@@ -2,6 +2,7 @@
 #define RESOURCE_MANAGER_H
 
 #include <map>
+#include <vector>
 #include <string>
 
 #include <glad/glad.h>
@@ -14,6 +15,30 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
+
+// 场景参数
+struct SceneParameter {
+    float width, length;
+    vector<float> obstacles_postion_x;
+    vector<float> obstacles_postion_z;
+};
+
+// 角色参数
+struct CharacterParameter {
+    float x, z, hp, atk;
+    CharacterParameter(float x, float z, float hp, float atk):x(x),z(z),hp(hp),atk(atk){}
+    CharacterParameter():x(x), z(z), hp(0), atk(0) {}
+};
+
+struct Parameter
+{
+    SceneParameter scene_parameter;
+    CharacterParameter player_parameter;
+    vector<CharacterParameter> enemy_parameter;
+    vector<CharacterParameter> bag_parameter;
+
+};
+
 // 单例模式
 // 加载并按照命名来存储 着色器/纹理/模型
 // 所有的功能和资源都是静态的
@@ -24,9 +49,9 @@ public:
     // 把所有资源存储在字典中，以命名查找
     static std::map<std::string, Shader>    Shaders;
     static std::map<std::string, Texture2D>    Textures;
-    //typedef vector<Mesh> Model;
     static std::map<std::string, Model>    Models;
     static string currentName;
+    static Parameter Parameters;
 
     // 从文件中加载着色器
     static Shader& LoadShader(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile, std::string name);
@@ -40,6 +65,8 @@ public:
     static Model& LoadModel(string const& path, std::string name);
     // 检索一个已存储的模型
     static Model& GetModel(std::string name);
+    // 加载用户参数
+    static Parameter LoadParameter();
     // 正确地分配所有已加载的资源
     static void      Clear();
 private:

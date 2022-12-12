@@ -41,6 +41,15 @@ int main(int argc, char* argv[])
     GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Little FPS Game Enginee", nullptr, nullptr);
     glfwMakeContextCurrent(window);
 
+    // glfw: 窗口回调函数
+    glfwMakeContextCurrent(window);
+    glfwSetKeyCallback(window, key_callback);
+    glfwSetCursorPosCallback(window, mouse_callback);
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+
+    // glfw: 告诉GLFW捕获我们的鼠标
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
     // glad: 加载所有的OpenGL函数指针
     // ---------------------------------------
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -49,10 +58,7 @@ int main(int argc, char* argv[])
         return -1;
     }
 
-    // glfw: 窗口回调函数
-    glfwSetKeyCallback(window, key_callback);
-    glfwSetCursorPosCallback(window, mouse_callback);
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+   
 
     // OpenGL: 配置
     // --------------------
@@ -90,7 +96,7 @@ int main(int argc, char* argv[])
 
         // render 渲染
         // -----------------
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClearColor(0.3f, 0.4f, 0.8f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //清理缓冲
 
         fps.Render();

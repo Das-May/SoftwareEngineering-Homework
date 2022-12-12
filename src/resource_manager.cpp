@@ -14,6 +14,7 @@ std::map<std::string, Texture2D>    ResourceManager::Textures;
 //typedef vector<Mesh> Model;
 std::map<std::string, Model>    ResourceManager::Models;
 string ResourceManager::currentName;
+Parameter ResourceManager::Parameters;
 
 Shader& ResourceManager::LoadShader(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile, std::string name)
 {
@@ -49,10 +50,47 @@ Model& ResourceManager::GetModel(std::string name)
     return Models[name];
 }
 
+Parameter ResourceManager::LoadParameter()
+{
+    //初始化
+    Parameters.bag_parameter.clear();
+    Parameters.enemy_parameter.clear();
+
+    // 读取
+
+
+    CharacterParameter c;
+    // 获取场景参数
+    Parameters.scene_parameter.width = 100;
+    Parameters.scene_parameter.length = 100;
+    
+    Parameters.scene_parameter.obstacles_postion_x.push_back(3);
+    Parameters.scene_parameter.obstacles_postion_z.push_back(4);
+    // 玩家参数
+    Parameters.player_parameter.x = 5;
+    Parameters.player_parameter.z = 3;
+
+    // 血包参数
+    for (int i = 1; i < 10; i+=2)
+    {
+        CharacterParameter b(i, i, 10, 10);
+        Parameters.bag_parameter.push_back(b);
+    }
+
+    // 敌人参数
+    CharacterParameter e(3, 7, 10, 10);
+    Parameters.enemy_parameter.push_back(e);
+
+    return Parameters;
+}
+
 void ResourceManager::Clear()
 {
     // (properly) delete all shaders删除所有着色器	
     for (auto iter : Shaders)
+        glDeleteProgram(iter.second.ID);
+    // 从gl上下文中删除所有纹理
+    for (auto iter : Textures)
         glDeleteProgram(iter.second.ID);
 }
 

@@ -12,10 +12,10 @@ void Shader::Compile(const char* vertexSource, const char* fragmentSource, const
 {
     unsigned int sVertex, sFragment, gShader;
     // vertex Shader顶点着色器
-    sVertex = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(sVertex, 1, &vertexSource, NULL);
-    glCompileShader(sVertex);
-    checkCompileErrors(sVertex, "VERTEX");
+    sVertex = glCreateShader(GL_VERTEX_SHADER);         // 开辟缓存空间
+    glShaderSource(sVertex, 1, &vertexSource, NULL);    // 链接代码
+    glCompileShader(sVertex);                           // 编译着色器
+    checkCompileErrors(sVertex, "VERTEX");    // 检查编译错误
     // fragment Shader片元着色器
     sFragment = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(sFragment, 1, &fragmentSource, NULL);
