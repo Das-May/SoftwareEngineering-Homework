@@ -19,6 +19,7 @@ public:
     // Îö¹¹º¯Êý
     ~Renderer();
     // »æÖÆ
+    void setPbrShaderParameters(glm::vec3 albedo, float metallic, float roughness, float ao);
     void Draw(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f));
 private:
     Model model;

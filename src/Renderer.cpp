@@ -13,6 +13,15 @@ Renderer::~Renderer()
 	
 }
 
+void Renderer::setPbrShaderParameters(glm::vec3 albedo, float metallic, float roughness, float ao)
+{
+	shader.Use();
+	shader.SetVector3f("albedo", albedo);
+	shader.SetFloat("metallic", metallic);
+	shader.SetFloat("roughness", roughness);
+	shader.SetFloat("ao", ao);
+}
+
 void Renderer::Draw(glm::vec3 position, glm::vec3 scale)
 {
 	//¼¤»î×ÅÉ«Æ÷
