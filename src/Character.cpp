@@ -10,6 +10,8 @@ Character::Character(float hp, float atk)
 void Character::modifyHp(float value)
 {
 	hp += value;
+	if (hp <= 0)
+		isdeath = true;
 }
 
 void Character::modifyAtk(float value)

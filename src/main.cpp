@@ -15,6 +15,7 @@
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);			// 配置窗口（帧缓冲）大小的函数
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);	// 响应用户键盘输入的函数
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
 
@@ -45,6 +46,7 @@ int main(int argc, char* argv[])
     glfwMakeContextCurrent(window);
     glfwSetKeyCallback(window, key_callback);
     glfwSetCursorPosCallback(window, mouse_callback);
+    glfwSetMouseButtonCallback(window, mouse_button_callback);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     // glfw: 告诉GLFW捕获我们的鼠标
@@ -122,10 +124,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         if (action == GLFW_PRESS)
             fps.Keys[key] = true;
         else if (action == GLFW_RELEASE)
-        {
             fps.Keys[key] = false;
-            //fps.KeysProcessed[key] = false;
-        }
     }
     
 }
@@ -138,7 +137,11 @@ void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
     fps.ypos = static_cast<float>(yposIn);
 }
 
-
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+    if (action == GLFW_PRESS && button == GLFW_MOUSE_BUTTON_LEFT)
+        fps.shooting = true;
+}
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
     // 确保视口匹配新的窗口尺寸

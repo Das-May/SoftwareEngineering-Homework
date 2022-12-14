@@ -26,7 +26,8 @@ public:
     // 构造函数
     GameObject();
     GameObject(tagType tag, glm::vec2 pos, float scale, int hp, int atk);
-    // 功能函数s
+    // 功能函数
+    void BeAttack(Character& character);//被攻击
     virtual void Draw(Renderer& renderer);// 绘制
 };
 

@@ -9,6 +9,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <vector>
+#include <iostream>
 
 // 用户参数
 Parameter parameter;
@@ -20,17 +21,18 @@ Renderer* obstacle;
 Renderer* bag;
 Renderer* enemy;
 
+GameObject* player;
 vector<GameObject*> enemies;
 vector<GameObject*> bags;
 vector<GameObject*> obstacles;
 
 // 摄像机
-Camera camera(glm::vec3(0.0f, 1.5f, 3.0f)); 
+Camera camera(glm::vec3(0.0f, 1.5f, 0.0f)); 
 bool firstMouse = true;
 
 
 Game::Game(unsigned int width, unsigned int height)
-    : State(GAME_ACTIVE), Keys(), Width(width), Height(height)
+    : State(GAME_ACTIVE), Keys(), shooting(false), Width(width), Height(height)
 {
     lastX = Game::Width / 2.0f;
     lastY = Game::Height / 2.0f;
@@ -38,13 +40,37 @@ Game::Game(unsigned int width, unsigned int height)
 
 Game::~Game()
 {
-    delete test;
+    Clear();
 }
 
+void Game::Clear()
+{
+    delete test;
+    delete scene;
+    delete obstacle;
+    delete bag;
+    delete enemy;
+
+    for (auto& e : enemies)
+        delete e;
+    enemies.clear();
+    for (auto& b : bags)
+        delete b;
+    bags.clear();
+    for (auto& o : obstacles)
+        delete o;
+    obstacles.clear();
+}
 void Game::Init()
 {
+    // 清空
+    Clear();
+
     // 加载用户参数
     parameter = ResourceManager::LoadParameter();
+    player = new GameObject(PLAYER, 
+        glm::vec2(parameter.player_parameter.x, parameter.player_parameter.z), 1.0f,
+        parameter.player_parameter.hp, parameter.player_parameter.atk);
 
     // 加载着色器
     ResourceManager::LoadShader("shaders/pbr.vs", "shaders/pbr.fs", nullptr, "场景材质");
@@ -67,7 +93,7 @@ void Game::Init()
 
     // 加载模型
     ResourceManager::LoadModel("models/FPS_box.obj", "场景");
-    ResourceManager::LoadModel("models/cube.obj", "障碍物");
+    ResourceManager::LoadModel("models/barrier.obj", "障碍物");
     ResourceManager::LoadModel("models/box.obj", "血包");
     ResourceManager::LoadModel("models/cannon.obj", "炮台");
 
@@ -129,6 +155,8 @@ void Game::ProcessInput(float dt)
         camera.ProcessKeyboard(LEFT, dt);
     if (this->Keys[GLFW_KEY_D] == GLFW_PRESS)
         camera.ProcessKeyboard(RIGHT, dt);
+    if (this->Keys[GLFW_KEY_0] == GLFW_PRESS)
+        this->Init();
 
     // 处理鼠标输入
     if (firstMouse)
@@ -137,14 +165,17 @@ void Game::ProcessInput(float dt)
         lastY = ypos;
         firstMouse = false;
     }
-
     float xoffset = xpos - lastX;
     float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
-
     lastX = xpos;
     lastY = ypos;
-
     camera.ProcessMouseMovement(xoffset, yoffset);
+
+    if (shooting == true)
+    {
+        Shoot();
+        shooting = false;
+    }
 }
 
 void Game::Render()
@@ -156,4 +187,35 @@ void Game::Render()
         b->Draw(*bag);
     for (auto& e : enemies)
         e->Draw(*enemy);
+}
+
+void Game::Shoot()
+{
+    //射线上任意一点 p = p0+t*d
+    glm::vec3 p0 = camera.Position;
+    glm::vec3 d = camera.Front;
+    // 当射线击中地面时，p1.y = 0
+    // 以此可得一元方程 p0.y + t*d.y = 0, 即t0 = ((p1.y) -p0.y)/ d.y, 解得t0
+    float t0 = -p0.y / d.y;
+    // 则地面上被集中的点的坐标p1 = p0+t0*d
+    glm::vec3 p1 = p0 + t0 * d;
+    cout << "击中位置:" << p1.x << "  " << p1.y << "  " << p1.z << endl;
+
+    // 遍历场景中的对象的位置，看看谁里这个击中点小于1
+    for (auto& b : bags)
+    {
+        if (abs(p1.x - b->position.x) < 1 && abs(p1.z - b->position.y) < 1)
+        {
+            b->BeAttack(player->character);
+        }
+            
+    }
+    for (auto& e : enemies)
+    {
+        if (abs(p1.x - e->position.x) < 1 && abs(p1.z - e->position.y) < 1)
+        {
+            cout << "击中敌人" << endl;
+            e->BeAttack(player->character);
+        }
+    }
 }

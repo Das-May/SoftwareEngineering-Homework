@@ -27,8 +27,10 @@ void Renderer::Draw(glm::vec3 position, glm::vec3 scale)
 	//激活着色器
 	this->shader.Use();
 	glm::mat4 model = glm::mat4(1.0f);//配置模型矩阵M
-	model = glm::scale(model, scale);
 	model = glm::translate(model, position);
+	model = glm::scale(model, scale);//TODO:缩小连带着导致位置也发生了偏移
+	//解决措施：缩放.旋转.变换 矩阵演算顺序有误
+	
 	shader.SetMatrix4("model", model);
 
 	// 绑定纹理
