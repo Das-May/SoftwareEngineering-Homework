@@ -15,7 +15,7 @@ class Renderer
 {
 public:
     // 构造函数 (初始化模型、着色器、纹理)
-    Renderer(Model& model, Shader &shader, Texture2D &texture);
+    Renderer(Model& model, Shader& shader, Texture2D& texture);
     // 析构函数
     ~Renderer();
     // 绘制

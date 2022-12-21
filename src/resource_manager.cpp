@@ -72,7 +72,7 @@ Parameter ResourceManager::LoadParameter()
             iss >> t;// 逐词读取，遍历每一行中的每个词 t
             Parameters.scene_parameter.width = t;
             iss >> t;
-            Parameters.scene_parameter.length = 100;
+            Parameters.scene_parameter.length = t;
         }  
     }
     cout << "成功读取场景参数" << endl;

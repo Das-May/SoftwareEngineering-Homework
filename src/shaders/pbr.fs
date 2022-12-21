@@ -77,7 +77,7 @@ void main()
         //float distance = length(lightPositions - WorldPos);
         //float attenuation = 1.0 / (distance * distance);
         //vec3 radiance = lightColors[i] * attenuation;
-        vec3 radiance = lightColor * 5.0;
+        vec3 radiance = lightColor * 100.0;
 
         // Cook-Torrance BRDF
         float NDF = DistributionGGX(N, H, roughness);   
@@ -110,12 +110,13 @@ void main()
     // this ambient lighting with environment lighting).
     vec3 ambient = vec3(0.03) * albedo * ao;
     vec3 textureColor = texture(texture1, TexCoords).xyz;
-    vec3 color =  (ambient +Lo) * textureColor;
+    vec3 color =  (dot(N, L) + dot(N, H)) * textureColor  ;
+    //vec3 color =  ambient +Lo;
 
     // HDR tonemapping
-    color = color / (color + vec3(1.0));
+    //color = color / (color + vec3(1.0));
     // gamma correct
-    color = pow(color, vec3(1.0/2.2)); 
+    //color = pow(color, vec3(1.0/2.2)); 
 
     FragColor = vec4(color, 1.0);
 }

@@ -19,7 +19,7 @@ class Game
 public:
     // game state
     GameState               State;
-    bool                    Keys[1024], shooting;
+    bool                    Keys[1024], shooting, leftHit, rightHit, frontHit, backHit;
     float                   lastX, lastY, xpos, ypos;
     unsigned int            Width, Height;
     // 构造函数/析构函数
@@ -34,6 +34,7 @@ public:
 private:
     void Clear();
     void Shoot();
+    void Hit();
 };
 
 #endif

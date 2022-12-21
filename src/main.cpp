@@ -109,6 +109,7 @@ int main(int argc, char* argv[])
     // 程序终止之后，回收资源
     // ---------------------------------------------------------
 
+
     glfwTerminate();
     return 0;
 }
@@ -139,7 +140,7 @@ void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
-    if (action == GLFW_PRESS && button == GLFW_MOUSE_BUTTON_LEFT)
+    if (action == GLFW_PRESS && button == GLFW_MOUSE_BUTTON_RIGHT)
         fps.shooting = true;
 }
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)

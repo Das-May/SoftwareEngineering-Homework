@@ -51,16 +51,13 @@ void Game::Clear()
     delete bag;
     delete enemy;
 
-    for (auto& e : enemies)
-        delete e;
     enemies.clear();
-    for (auto& b : bags)
-        delete b;
     bags.clear();
-    for (auto& o : obstacles)
-        delete o;
     obstacles.clear();
+
+    //ResourceManager::Clear();
 }
+
 void Game::Init()
 {
     // 清空
@@ -68,6 +65,7 @@ void Game::Init()
 
     // 加载用户参数
     parameter = ResourceManager::LoadParameter();
+    camera.Position = glm::vec3(parameter.player_parameter.x, 1.5f, parameter.player_parameter.z);
     player = new GameObject(PLAYER, 
         glm::vec2(parameter.player_parameter.x, parameter.player_parameter.z), 1.0f,
         parameter.player_parameter.hp, parameter.player_parameter.atk);
@@ -82,20 +80,20 @@ void Game::Init()
     for (auto& s : ResourceManager::Shaders) {
         s.second.Use();
         s.second.SetInteger("texture1", 0);
-        s.second.SetVector3f("lightDirection", glm::vec3(-10.0f, 50.0f, 0.0f));
+        s.second.SetVector3f("lightDirection", glm::vec3(-10.0f, 50.0f, 10.0f));
         s.second.SetVector3f("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
     }
 
     // 加载纹理
     ResourceManager::LoadTexture("textures/CheckerboardLattice.jpg", false, "棋盘格");
-    ResourceManager::LoadTexture("textures/box/XZ_XiangGai_BaseColor.png", false, "血包_基本贴图");
-    ResourceManager::LoadTexture("textures/cannon/Sentry_Turret_ALL_02_-_Default_BaseColor.png", false, "炮台_基本贴图");
+    ResourceManager::LoadTexture("textures/box/box_basecolor.jpg", false, "血包_基本贴图");
+    ResourceManager::LoadTexture("textures/cannon/Sentry_Turret_ALL_02_-_Default_BaseColor.jpg", false, "炮台_基本贴图");
 
     // 加载模型
-    ResourceManager::LoadModel("models/FPS_box.obj", "场景");
+    ResourceManager::LoadModel("models/scene.obj", "场景");
     ResourceManager::LoadModel("models/barrier.obj", "障碍物");
-    ResourceManager::LoadModel("models/box.obj", "血包");
-    ResourceManager::LoadModel("models/cannon.obj", "炮台");
+    ResourceManager::LoadModel("models/bag.obj", "血包");
+    ResourceManager::LoadModel("models/enemy.obj", "炮台");
 
     // 创建渲染对象
     bag = new Renderer(ResourceManager::GetModel("血包"),
@@ -146,14 +144,15 @@ void Game::Update(float dt)
 
 void Game::ProcessInput(float dt)
 {
+    Hit();
     // 处理键盘输入
-    if (this->Keys[GLFW_KEY_W] == GLFW_PRESS)
+    if (this->Keys[GLFW_KEY_W] == GLFW_PRESS && !frontHit)
         camera.ProcessKeyboard(FORWARD, dt);
-    if (this->Keys[GLFW_KEY_S] == GLFW_PRESS)
+    if (this->Keys[GLFW_KEY_S] == GLFW_PRESS && !backHit)
         camera.ProcessKeyboard(BACKWARD, dt);
-    if (this->Keys[GLFW_KEY_A] == GLFW_PRESS)
+    if (this->Keys[GLFW_KEY_A] == GLFW_PRESS && !leftHit)
         camera.ProcessKeyboard(LEFT, dt);
-    if (this->Keys[GLFW_KEY_D] == GLFW_PRESS)
+    if (this->Keys[GLFW_KEY_D] == GLFW_PRESS && !rightHit)
         camera.ProcessKeyboard(RIGHT, dt);
     if (this->Keys[GLFW_KEY_0] == GLFW_PRESS)
         this->Init();
@@ -206,6 +205,7 @@ void Game::Shoot()
     {
         if (abs(p1.x - b->position.x) < 1 && abs(p1.z - b->position.y) < 1)
         {
+            cout << "* 拾取物品" << endl;
             b->BeAttack(player->character);
         }
             
@@ -214,8 +214,38 @@ void Game::Shoot()
     {
         if (abs(p1.x - e->position.x) < 1 && abs(p1.z - e->position.y) < 1)
         {
-            cout << "击中敌人" << endl;
+            cout << "* 击中敌人" << endl;
             e->BeAttack(player->character);
+            //break;
         }
+    }
+}
+
+void Game::Hit()
+{
+    frontHit = backHit = leftHit = rightHit = false;
+    glm::vec3 p = camera.Position;
+    // 遍历场景中的障碍物，若障碍物的几何中心与摄像机的距离小于10，则已碰撞
+    for (auto& o : obstacles)
+    {
+
+        float Dx = abs(o->position.x - p.x);
+        float Dz = abs(o->position.y - p.z);
+        if (Dx <= 2 && Dz <= 2)
+        {
+            glm::vec3 DirectionVec = glm::vec3(o->position.x, 0.0, o->position.y) - p;
+            float a = glm::dot(camera.Front, DirectionVec);
+            float b = glm::dot(camera.Right, DirectionVec);
+            if (a > 0.5)
+                frontHit = true;
+            else if(a < -0.5)
+                backHit = true;
+            if (b < 0.5)
+                leftHit = true;
+            else if (b > 0.5)
+                rightHit = true;
+
+        }
+
     }
 }
